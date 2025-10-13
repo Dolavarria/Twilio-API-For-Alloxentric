@@ -1,28 +1,32 @@
 from fastapi import FastAPI
-from routes.device import router as device_router
-from routes.message import router as message_router
-from database.db_service import db_service
-from services.twilio_service import twilio_service
+from routes import sms
+from fastapi.middleware.cors import CORSMiddleware
 
-# Crear aplicación FastAPI con documentación automática
 app = FastAPI(
-    title="API de Mensajería SMS",
-    description="API para envío y recepción de SMS usando Twilio",
-    version="1.0.0"
+    title="SMS Sender API",
+    description="API para enviar mensajes SMS vía Twilio y almacenarlos en MongoDB",
+    version="0.2.0",
 )
 
-# Registrar rutas de endpoints
-app.include_router(device_router)  # /device/*
-app.include_router(message_router)  # /message/*
+# Configurar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(sms.router)
+
 
 @app.get("/")
-def read_root():
-    """Endpoint de estado de la API y servicios conectados"""
+async def root():
     return {
-        "message": "API de Mensajería SMS",
-        "version": "1.0.0",
-        "status": {
-            "database": "connected",
-            "twilio": "configured" if twilio_service.is_configured() else "not_configured"
-        }
+        "message": "Bienvenido a la API de envío de SMS",
+        "documentation": "/docs",
+        "endpoints": {
+            "send_sms": "/sms/send",
+            "sms_history_by_number": "/sms/history/{phone_number}",
+        },
     }

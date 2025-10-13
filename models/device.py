@@ -1,16 +1,9 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
 
-class DeviceCreate(BaseModel):
-    """Modelo para crear un nuevo dispositivo/canal de comunicación"""
-    device_name: str
-    device_description: str
-    
-    class Config:
-        extra = "allow"
 
-class DeviceResponse(BaseModel):
-    """Modelo para la respuesta al crear un dispositivo"""
-    message: str = "Dispositivo creado exitosamente"
-    device_id: Optional[str] = None
-    device_webhook: Optional[str] = None
+class SMSMessage(BaseModel):
+    to_number: str = Field(
+        ...,
+        description="Phone number to send the message to, in E.164 format (e.g., +1234567890)",
+    )
+    message_body: str = Field(..., description="The content of the SMS message")
