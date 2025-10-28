@@ -1,14 +1,13 @@
 from fastapi import FastAPI
-from routes import sms
+from routes import sms, phone_numbers
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="SMS Sender API",
     description="API para enviar mensajes SMS vía Twilio y almacenarlos en MongoDB",
-    version="0.2.0",
+    version="0.3.0",
 )
 
-# Configurar CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,6 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(sms.router)
+app.include_router(phone_numbers.router)
 
 
 @app.get("/")
@@ -28,5 +28,9 @@ async def root():
         "endpoints": {
             "send_sms": "/sms/send",
             "sms_history_by_number": "/sms/history/{phone_number}",
+            "search_numbers": "/phone-numbers/search",
+            "purchase_number": "/phone-numbers/purchase",
+            "my_numbers": "/phone-numbers/my-numbers",
+            "release_number": "/phone-numbers/{phone_number_sid}",
         },
     }
