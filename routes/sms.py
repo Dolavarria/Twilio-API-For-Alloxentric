@@ -11,7 +11,6 @@ from database.mongodb import (
     find_sms_by_number,
     insert_incoming_sms,
     find_incoming_sms_by_number,
-    get_all_incoming_sms,
     incoming_sms_collection,
 )
 import os
