@@ -22,7 +22,7 @@ router = APIRouter(
 
 def get_twilio_client():
     """
-    Reutilizamos la misma función para obtener el cliente de Twilio
+    Función para obtener el cliente de Twilio
     """
     account_sid = os.getenv("TWILIO_ACCOUNT_SID")
     auth_token = os.getenv("TWILIO_AUTH_TOKEN")
